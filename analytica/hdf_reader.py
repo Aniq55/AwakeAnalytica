@@ -9,7 +9,7 @@ class Hdf_reader:
     def hdf2csv(self):
         """
         Reads the hdf file at self.filename and stores its csv details equivalent at
-        the output directory
+        the output directory.
         """
         import h5py
         import pandas as pd
@@ -34,14 +34,35 @@ class Hdf_reader:
         df = pd.DataFrame.from_dict(rows, orient='index', columns = ['type', 'size', 'shape', 'data_type'])
         df.to_csv(output_path, sep=',')
 
-    def csv2db(self):
+
+    def hdf2db(self):
+        """
+        Reads the hdf file at self.filename and stores its details in the database.
+        """
+        import h5py
+        import pandas as pd
         import sqlite3
+
+        unix_time =  (self.filename.split('/')[-1])[0:19]
+
         conn = sqlite3.connect(self.dbname)
         c = conn.cursor()
-        # Create table if it does not exist
-        # c.execute('''CREATE TABLE alldata3 (location text, type text, size real, shape text, data_type text, unit_time text)''')
-        unix_time =  (self.filename.split('/')[-1])[0:19]
-        # Store all entries from the csv file or go for direct storage
-        c.execute('''INSERT INTO alldata3 VALUES ('AwakeEventData/XUCL-SPECTRO/BinningSetting/hend','Dataset',1,"(1,)",'int32', %s)'''%(unix_time))
+        c.execute('''CREATE TABLE alldata0 (location text, type text, size text, shape text, data_type text, unit_time text)''')
+
+        input_file = h5py.File(self.filename, 'r')
+
+        def traverse(path, element):
+            if isinstance(element, h5py.Dataset):
+                try:
+                    data_type = element.dtype
+                except Exception as e:
+                    data_type = str(e)
+
+                c.execute('''INSERT INTO alldata0 VALUES (?,'Dataset',?,?,?,?)''', (str(path), str(element.size), str(element.shape), str(data_type), unix_time))
+            else:
+                c.execute('''INSERT INTO alldata0 VALUES (?,'Group','','','',?)''',(str(path), unix_time))
+
+        input_file.visititems(traverse)
+
         conn.commit()
         conn.close()
