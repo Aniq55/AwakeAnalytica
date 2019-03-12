@@ -1,3 +1,3 @@
 # AwakeAnalytica
 
-![alt text](aux/awake.png =250x)
+![alt text](aux/awake.png)
