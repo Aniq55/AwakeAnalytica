@@ -1,15 +1,19 @@
-class hdf_reader:
+class Hdf_reader:
 
     def __init__(self):
         self.filename= None
         self.dbname= None
         self.csvpath= None
 
+
     def hdf2csv(self):
-    """
-    Reads the hdf file at self.filename and stores its csv details equivalent at
-    the output directory
-    """
+        """
+        Reads the hdf file at self.filename and stores its csv details equivalent at
+        the output directory
+        """
+        import h5py
+        import pandas as pd
+
         output_path = self.csvpath + ((self.filename.split('/')[-1]).split('.'))[0] +'.csv'
         input_file = h5py.File(self.filename, 'r')
 
