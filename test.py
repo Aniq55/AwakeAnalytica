@@ -14,5 +14,8 @@ h.csvpath = '/media/aniq55/WORK/GSOC2019/AwakeAnalytica/data/csv/'
 # h.hdf2csv()
 
 """
-CSV to Mongo # DEBUG:
+CSV to DB (Sqlite3)
 """
+
+h.dbname = 'example.db'
+h.csv2db()
