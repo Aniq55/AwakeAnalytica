@@ -33,3 +33,6 @@ class Hdf_reader:
         input_file.visititems(traverse)
         df = pd.DataFrame.from_dict(rows, orient='index', columns = ['type', 'size', 'shape', 'data_type'])
         df.to_csv(output_path, sep=',')
+
+    def csv2db(self):
+        pass
