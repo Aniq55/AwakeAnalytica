@@ -43,11 +43,14 @@ class Hdf_reader:
         import pandas as pd
         import sqlite3
 
-        unix_time =  (self.filename.split('/')[-1])[0:19]
-
         conn = sqlite3.connect(self.dbname)
         c = conn.cursor()
-        c.execute('''CREATE TABLE alldata0 (location text, type text, size text, shape text, data_type text, unit_time text)''')
+        # Create table if not created
+        table_name = 'T'+(self.filename.split('/')[-1])[0:19]
+        c.execute('''CREATE TABLE IF NOT EXISTS ALLDATA (table_name text)''')
+        c.execute("INSERT INTO ALLDATA VALUES ( ? )",(table_name,))
+
+        c.execute('CREATE TABLE IF NOT EXISTS {} (location text, type text, size text, shape text, data_type text)'.format(table_name))
 
         input_file = h5py.File(self.filename, 'r')
 
@@ -58,9 +61,9 @@ class Hdf_reader:
                 except Exception as e:
                     data_type = str(e)
 
-                c.execute('''INSERT INTO alldata0 VALUES (?,'Dataset',?,?,?,?)''', (str(path), str(element.size), str(element.shape), str(data_type), unix_time))
+                c.execute('''INSERT INTO {}  VALUES (?,'Dataset',?,?,?)'''.format(table_name),(str(path), str(element.size), str(element.shape), str(data_type)))
             else:
-                c.execute('''INSERT INTO alldata0 VALUES (?,'Group','','','',?)''',(str(path), unix_time))
+                c.execute('''INSERT INTO {}  VALUES (?,'Group','','','')'''.format(table_name),(str(path),))
 
         input_file.visititems(traverse)
 
