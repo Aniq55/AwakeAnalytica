@@ -1,20 +1,21 @@
-db_path = 'data/db/example.db'
-
-from analytica.db_reader import Db_reader
-
-db= Db_reader()
-
-db.dbname = db_path
-db.conn2db()
-# T_1541962108935000000_167_838
-# q= 'SELECT * FROM ALLDATA WHERE data_date BETWEEN "2015-01-01" AND "2016-01-01"'
-
-from analytica.utils import *
-
-# print_result(db.fetch(q))
-
-tables_filtered = db.filter_by_date(start_date= inquotes("2018-11-11"), end_date= inquotes("2018-11-12"))
-print(tables_filtered)
+# db_path = 'data/db/example.db'
+#
+# from analytica.db_reader import Db_reader
+#
+# db= Db_reader()
+#
+# db.dbname = db_path
+# db.conn2db()
+# # T_1541962108935000000_167_838
+# # q= 'SELECT * FROM ALLDATA WHERE data_date BETWEEN "2015-01-01" AND "2016-01-01"'
+#
+# from analytica.utils import *
+#
+# # print_result(db.fetch(q))
+#
+# # tables_filtered = db.filter_by_date(start_date= "2018-11-11", end_date= "2018-11-12")
+# tables_filtered= db.match_keyword('streakImage')
+# print_dict(tables_filtered)
 
 """ TASK
 Search keyword: streakImage
@@ -24,7 +25,11 @@ Display: all results, table wise.
 
 """
 
+from analytica.access_data import *
 
+ad= Access_data()
+
+ad.find('streakImage')
 
 
 

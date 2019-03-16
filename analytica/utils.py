@@ -15,12 +15,24 @@ def validate_query(query):
     """
     return query
 
-def print_result(result):
+def print_list(result):
     """
-    Prints the result row by row
+    Prints a list of tuples
     """
     for row in result:
         print(row)
+
+def print_dict(result):
+    """
+    Prints a dictionary
+    """
+    for x in result.keys():
+        print(x)
+        print('--------------------------------')
+        for y in result.get(x):
+            print(y[0])
+        print('================================')
+
 
 def inquotes(s):
     return '"'+ s + '"'
