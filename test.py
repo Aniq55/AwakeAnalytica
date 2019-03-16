@@ -1,14 +1,21 @@
+""" TASK
+Search keyword: streakImage
+Date range: 2018-11-10 to 2018-11-12
+
+Display: all results, table wise.
+
 """
-HDF to CSV conversion
-"""
 
-from analytica.hdf_reader import Hdf_reader
+from analytica.access_data import *
+from analytica.utils import *
 
+# Setup the database
+setup_database()
 
-h= Hdf_reader()
+adata= Access_data()
 
-# Provding Absolute Paths
-h.filename = '/media/aniq55/WORK/GSOC2019/AwakeAnalytica/data/hdf/1541962108935000000_167_838.h5'
-h.csvpath = '/media/aniq55/WORK/GSOC2019/AwakeAnalytica/data/csv/'
+# Finding data
+adata.find(keyword='streakImage', start_date="2018-11-10", end_date="2018-11-13")
 
-h.hdf2csv()
+# Loading data
+x= adata.load(table='T_1541962108935000000_167_838', data_name='AwakeEventData/XMPP-STREAK/StreakImage/streakImageData')
