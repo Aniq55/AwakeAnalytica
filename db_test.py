@@ -31,6 +31,9 @@ ad= Access_data()
 
 ad.find('streakImage')
 
+x= ad.load('T_1541962108935000000_167_838','AwakeEventData/XMPP-STREAK/StreakImage/streakImageData')
+print(x)
+
 
 
 
