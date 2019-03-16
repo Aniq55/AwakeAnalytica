@@ -1,3 +1,5 @@
+from analytica.utils import *
+
 class Db_reader:
 
     def __init__(self):
@@ -11,18 +13,14 @@ class Db_reader:
         self.cursor = self.connection.cursor()
 
     def fetch(self, query):
-        from analytica.utils import validate_query
-        # Ideally, check the validity of the query
         self.cursor.execute(validate_query(query))
         return self.cursor.fetchall()
 
     def filter_by_date(self, start_date, end_date):
-        from analytica.utils import inquotes
         query= 'SELECT * FROM ALLDATA WHERE data_date BETWEEN {} AND {}'.format(inquotes(start_date), inquotes(end_date))
         return self.fetch(query)
 
     def match_keyword(self, keyword, start_date=None, end_date=None):
-        from analytica.utils import inquotes
         if start_date is not None and end_date is not None:
             tables_list = [x[0] for x in self.filter_by_date(start_date, end_date)]
         else:
@@ -35,3 +33,6 @@ class Db_reader:
             results[table]= self.fetch('SELECT * FROM {} WHERE location LIKE {}'.format(table, inquotes(keyword)))
 
         return results
+
+    def close(self):
+        self.connection.close()
