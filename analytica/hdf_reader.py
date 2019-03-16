@@ -5,7 +5,6 @@ class Hdf_reader:
         self.dbname= None
         self.csvpath= None
 
-
     def hdf2csv(self):
         """
         Reads the hdf file at self.filename and stores its csv details equivalent at
@@ -42,13 +41,14 @@ class Hdf_reader:
         import h5py
         import pandas as pd
         import sqlite3
+        from analytica.utils import file2utc
 
         conn = sqlite3.connect(self.dbname)
         c = conn.cursor()
-        # Create table if not created
-        table_name = 'T'+(self.filename.split('/')[-1])[0:19]
-        c.execute('''CREATE TABLE IF NOT EXISTS ALLDATA (table_name text)''')
-        c.execute("INSERT INTO ALLDATA VALUES ( ? )",(table_name,))
+
+        table_name = 'T_'+(self.filename.split('/')[-1])[:-3]
+        c.execute('''CREATE TABLE IF NOT EXISTS ALLDATA (table_name text, data_path text, data_date date)''')
+        c.execute("INSERT INTO ALLDATA VALUES ( ?, ?, ? )",(table_name, self.filename, file2utc(self.filename)))
 
         c.execute('CREATE TABLE IF NOT EXISTS {} (location text, type text, size text, shape text, data_type text)'.format(table_name))
 
