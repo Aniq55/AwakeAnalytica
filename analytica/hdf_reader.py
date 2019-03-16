@@ -49,6 +49,7 @@ class Hdf_reader:
         table_name = 'T_'+(self.filename.split('/')[-1])[:-3]
         c.execute('''CREATE TABLE IF NOT EXISTS ALLDATA (table_name text, data_path text, data_date date)''')
         c.execute("INSERT INTO ALLDATA VALUES ( ?, ?, ? )",(table_name, self.filename, file2utc(self.filename)))
+        conn.commit()
 
         c.execute('CREATE TABLE IF NOT EXISTS {} (location text, type text, size text, shape text, data_type text)'.format(table_name))
 
